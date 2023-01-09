@@ -123,5 +123,5 @@ inline vec3 refract(const vec3& uv, const vec3& n, double etai_over_etat) {
 
 vec3 random_in_unit_sphere();
 vec3 random_unit_vector();
-
+vec3 random_in_unit_disk();
 #endif
