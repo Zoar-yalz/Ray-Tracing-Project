@@ -5,11 +5,15 @@
 #include "color.h"
 #include "hittable_list.h"
 #include "sphere.h"
+#include "moving_sphere.h"
+
 
 #define STB_IMAGE_WRITE_IMPLEMENTATION
 #include"stb_image_write.h"
 
 #include <iostream>
+#include <omp.h>
+
 
 hittable_list random_scene() {
     hittable_list world;
@@ -30,6 +34,9 @@ hittable_list random_scene() {
                     auto albedo = color::random() * color::random();
                     sphere_material = make_shared<lambertian>(albedo);
                     world.add(make_shared<sphere>(center, 0.2, sphere_material));
+                    auto center2 = center + vec3(0, random_double(0, .5), 0);
+                    world.add(make_shared<moving_sphere>(
+                        center, center2, 0.0, 1.0, 0.2, sphere_material));
                 }
                 else if (choose_mat < 0.95) {
                     // metal
@@ -84,12 +91,12 @@ int main() {
     stbi_flip_vertically_on_write(true);//ÆôÓÃ·­×ª
 
     // Image
-    const auto aspect_ratio = 3.0 / 2.0;
-    const int image_width = 1200;
+    const auto aspect_ratio = 16.0 / 9.0;
+    const int image_width = 400;
     const int image_height = static_cast<int>(image_width / aspect_ratio);
     const char image_name[] = "output.png";
     char* image_data = new char[image_height*image_width*3];
-    const int samples_per_pixel = 500;
+    const int samples_per_pixel = 100;
     const int max_depth = 50;
 
 
@@ -106,12 +113,14 @@ int main() {
     auto dist_to_focus = 10.0;
     auto aperture = 0.1;
 
-    camera cam(lookfrom, lookat, vup, 20, aspect_ratio, aperture, dist_to_focus);
+
+    camera cam(lookfrom, lookat, vup, 20, aspect_ratio, aperture, dist_to_focus, 0.0, 1.0);
 
     // Render
 
     std::cout << "P3\n" << image_width << " " << image_height << "\n255\n";
 
+    #pragma omp parallel for
     for (int j = image_height - 1; j >= 0; --j) {
         std::cerr << "\rScanlines remaining: " << j << ' ' << std::flush;
         for (int i = 0; i < image_width; ++i) {
