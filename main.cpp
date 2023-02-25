@@ -18,8 +18,11 @@
 hittable_list random_scene() {
     hittable_list world;
 
-    auto ground_material = make_shared<lambertian>(color(0.5, 0.5, 0.5));
-    world.add(make_shared<sphere>(point3(0, -1000, 0), 1000, ground_material));
+    auto checker = make_shared<checker_texture>(color(0.2, 0.3, 0.1), color(0.9, 0.9, 0.9));
+    world.add(make_shared<sphere>(point3(0, -1000, 0), 1000, make_shared<lambertian>(checker)));
+
+    //auto ground_material = make_shared<lambertian>(color(0.5, 0.5, 0.5));
+    //world.add(make_shared<sphere>(point3(0, -1000, 0), 1000, ground_material));
 
     for (int a = -11; a < 11; a++) {
         for (int b = -11; b < 11; b++) {
@@ -96,7 +99,7 @@ int main() {
     const int image_height = static_cast<int>(image_width / aspect_ratio);
     const char image_name[] = "output.png";
     char* image_data = new char[image_height*image_width*3];
-    const int samples_per_pixel = 100;
+    const int samples_per_pixel = 400;
     const int max_depth = 50;
 
 
@@ -117,12 +120,12 @@ int main() {
     camera cam(lookfrom, lookat, vup, 20, aspect_ratio, aperture, dist_to_focus, 0.0, 1.0);
 
     // Render
-
-    std::cout << "P3\n" << image_width << " " << image_height << "\n255\n";
-
-    #pragma omp parallel for
+    std::cout << "Processing image:" << image_width << "*" << image_height << "\n";
+    std::cout << "samples_per_pixel:" << samples_per_pixel<<"\n";
+    int remain = image_height;
     for (int j = image_height - 1; j >= 0; --j) {
         std::cerr << "\rScanlines remaining: " << j << ' ' << std::flush;
+        #pragma omp parallel for
         for (int i = 0; i < image_width; ++i) {
             color pixel_color(0, 0, 0);
             for (int s = 0; s < samples_per_pixel; ++s) {
@@ -131,7 +134,6 @@ int main() {
                 ray r = cam.get_ray(u, v);
                 pixel_color += ray_color(r, world, max_depth);
             }
-            //write_color(std::cout, pixel_color, samples_per_pixel);
             write_color(image_data,image_width,image_height,j,i,pixel_color, samples_per_pixel);
 
         }

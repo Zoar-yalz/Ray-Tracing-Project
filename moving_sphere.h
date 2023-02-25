@@ -16,6 +16,8 @@ public:
 
     virtual bool hit(
         const ray& r, double t_min, double t_max, hit_record& rec) const override;
+    virtual bool bounding_box(
+        double _time0, double _time1, aabb& output_box) const override;
 
     point3 center(double time) const;
 
