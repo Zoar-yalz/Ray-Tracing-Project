@@ -57,6 +57,24 @@
     <ClInclude Include="texture.h">
       <Filter>头文件</Filter>
     </ClInclude>
+    <ClInclude Include="perlin.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="scenes.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="stb_image.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="aarect.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="box.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="constant_medium.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="vec3.cpp">
@@ -78,6 +96,27 @@
       <Filter>源文件</Filter>
     </ClCompile>
     <ClCompile Include="texture.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="perlin.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="scenes.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="aarect.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="box.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="hittable.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="constant_medium.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="sphere.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
   </ItemGroup>
